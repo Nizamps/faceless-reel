@@ -1,0 +1,4 @@
+project_id = "mivjedzcydxqisursdiq"
+
+[functions.generate-episode]
+verify_jwt = true

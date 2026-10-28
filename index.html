@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0e1110"><title>Studio — Faceless</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#"><span class="brand-mark">f</span><span>faceless<span class="brand-dot">.</span></span></a>
+      <div class="workspace"><span class="avatar">N</span><span><b>Personal studio</b><small>Creator workspace</small></span><span class="chevron">⌄</span></div>
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="nav">
+        <a class="nav-item active" href="#series"><span class="nav-icon">▦</span>Overview</a>
+        <a class="nav-item" href="#episodes"><span class="nav-icon">▶</span>Episodes <span class="nav-count" id="episode-count">0</span></a>
+        <a class="nav-item" href="#settings"><span class="nav-icon">⚙</span>Series settings</a>
+      </nav>
+      <div class="sidebar-bottom"><div class="help-card"><span class="sparkle">✳</span><b>Your ideas, in motion.</b><p>Build a consistent video series, one episode at a time.</p></div><div class="profile"><span class="avatar profile-avatar">N</span><span><b>Nizam</b><small>Personal plan</small></span><span class="more">···</span></div></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div class="crumb">Workspace <span>/</span> <b>Overview</b></div><div class="top-right"><span class="status-pill" id="connection-pill"><i></i><span id="connection-label">Connecting</span></span><button class="mini-button" id="auth-button">Sign in to sync</button></div></header>
+      <section class="auth-strip" id="auth-strip"><div><b>Sync your studio and turn on daily production</b><small>Sign in once to save your series settings and receive daily 4K video downloads.</small></div><form id="auth-form"><input id="auth-email" type="email" placeholder="Your email address" required autocomplete="email"><button type="submit" class="mini-button primary" id="auth-submit">Email me a sign-in link</button></form><span class="auth-user" id="auth-user" hidden></span></section>
+      <div class="content" id="series">
+        <section class="welcome-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> YOUR CREATOR STUDIO</div><h1>Make your next<br><em>great story.</em></h1><p class="subhead">Set up your series once. Then turn an idea into a ready-to-produce episode.</p></div><div class="header-art" aria-hidden="true"><div class="sun"></div><div class="mountain mountain-back"></div><div class="mountain mountain-front"></div><div class="art-grain"></div><span class="art-caption">HISTORY<br>IS ALIVE</span></div></section>
+        <div class="stats-row"><div class="stat"><span class="stat-icon">◷</span><div><small>YOUR SERIES</small><b id="series-stat">History in 60 Seconds</b></div></div><div class="stat"><span class="stat-icon">▤</span><div><small>EPISODES DRAFTED</small><b id="draft-stat">0 episodes</b></div></div><div class="stat"><span class="stat-icon">◉</span><div><small>PUBLISHING</small><b>Manual upload <span class="muted">· YouTube</span></b></div></div></div>
+        <section class="section-head"><div><div class="eyebrow">YOUR WORKFLOW</div><h2>From idea to episode</h2></div><span class="step-caption">3 steps <span class="step-track"><i></i><i></i><i></i></span></span></section>
+        <section class="workflow">
+          <article class="step-card"><div class="step-top"><span class="step-num">01</span><span class="step-icon icon-idea">✳</span></div><h3>Set your series</h3><p>Choose a niche, look, voice, and episode length.</p><span class="step-state complete-state"><i></i> READY TO EDIT</span></article>
+          <div class="step-connector">→</div>
+          <article class="step-card"><div class="step-top"><span class="step-num">02</span><span class="step-icon icon-create">✦</span></div><h3>Create an episode</h3><p>Gemini shapes your topic into a script and scene plan.</p><span class="step-state"><i></i> NEXT UP</span></article>
+          <div class="step-connector">→</div>
+          <article class="step-card"><div class="step-top"><span class="step-num">03</span><span class="step-icon icon-publish">↗</span></div><h3>Review & publish</h3><p>Export your package, finish the video, then upload it yourself.</p><span class="step-state muted-state"><i></i> YOUR CALL</span></article>
+        </section>
+        <div class="studio-grid">
+          <section class="panel setup-panel" id="settings"><div class="panel-heading"><div><span class="panel-kicker">SERIES SETUP</span><h2>Your creative blueprint</h2></div><button class="text-button" id="save-settings">Save changes <span>↗</span></button></div>
+            <div class="form-grid"><label class="field span-2">Series name<input id="series-name" value="History in 60 Seconds" maxlength="70"></label><label class="field">Content niche<select id="niche"><option>History</option><option>Science</option><option>Mythology</option><option>Nature</option><option>Unsolved mysteries</option><option>Custom niche</option></select></label><label class="field">Language<select id="language"><option>English</option><option>Hindi</option><option>Spanish</option><option>French</option><option>Portuguese</option></select></label><label class="field">Narration style<select id="voice"><option>Warm documentary</option><option>Curious storyteller</option><option>Dramatic and cinematic</option><option>Calm and thoughtful</option></select></label><label class="field">Visual direction<select id="art"><option>Cinematic archival illustration</option><option>Painterly historical scenes</option><option>Clean editorial collage</option><option>Vintage film aesthetic</option></select></label><label class="field">Caption style<select id="caption"><option>Bold, clean subtitles</option><option>Minimal lower thirds</option><option>Highlight key phrases</option></select></label><label class="field">Background music<select id="music"><option>Subtle cinematic</option><option>Quiet ambient</option><option>Epic orchestral</option><option>No music</option></select></label><label class="field">Visual effects<select id="effects"><option>Slow camera moves + soft transitions</option><option>Film grain + soft transitions</option><option>Gentle vignette + soft transitions</option><option>Clean cuts, no effects</option></select></label><label class="field">Aspect ratio<select id="aspect"><option value="9:16">9:16 · Vertical</option><option value="16:9">16:9 · Landscape</option><option value="1:1">1:1 · Square</option><option value="4:5">4:5 · Portrait</option></select></label><label class="field">Episode length<div class="select-with-suffix"><select id="duration"><option value="50">50 seconds</option><option value="51">51 seconds</option><option value="52">52 seconds</option><option value="53">53 seconds</option><option value="54">54 seconds</option><option value="55">55 seconds</option><option value="56">56 seconds</option><option value="57">57 seconds</option><option value="58">58 seconds</option><option value="59">59 seconds</option></select><span>50–59 sec</span></div></label><label class="field">Daily video preparation<div class="select-with-suffix"><select id="schedule"><option value="off">Off · manual episodes only</option><option value="daily">Every day · ready by 7:00 PM</option></select><span class="manual-tag">8:17 AM START</span></div></label></div>
+            <div class="account-row"><div class="account-copy"><span class="account-symbol">▶</span><div><b>YouTube</b><small>Manual upload · OAuth not connected</small></div></div><span class="not-connected">NOT CONNECTED</span></div>
+          </section>
+          <section class="panel create-panel" id="episodes"><div class="panel-heading"><div><span class="panel-kicker">EPISODE WORKSHOP</span><h2>What story are we telling?</h2></div><span class="spark-badge">✦ GEMINI</span></div><p class="panel-intro">Drop in a topic. Gemini will build a hook, narration, scene-by-scene visual direction, captions, and YouTube copy.</p>
+            <label class="field">Episode topic<textarea id="topic" rows="3" placeholder="e.g. The 9-day reign of the shortest-serving Roman emperor"></textarea></label>
+            <div class="topic-hint"><span>✳</span> Specific topics make more compelling episodes.</div>
+            <button class="generate-button" id="generate"><span>✦</span> Generate episode package <span class="button-arrow">→</span></button>
+            <p class="privacy-note"><span>⌑</span> Sign in to save series settings and daily videos to your private Supabase library.</p>
+            <div class="result" id="result" hidden></div>
+          </section>
+        </div>
+        <section class="recent-section"><div class="section-head recent-head"><div><div class="eyebrow">YOUR LIBRARY</div><h2>Recent episodes</h2></div><span class="library-note" id="library-note">Sign in to load cloud drafts and finished videos</span></div><div class="episodes-list" id="episodes-list"><div class="empty-state"><span class="empty-icon">▤</span><div><b>Your daily video library will appear here.</b><p>Enable daily preparation in your series settings after signing in.</p></div></div></div></section>
+        <footer><span>FACeless STUDIO · PERSONAL EDITION</span><span>Made for curious minds <b>✳</b></span></footer>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="./supabase-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>
