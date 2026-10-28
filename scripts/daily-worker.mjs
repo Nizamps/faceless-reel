@@ -15,11 +15,14 @@ const BASE = 'https://generativelanguage.googleapis.com/v1beta';
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function supabase(table, { method='GET', query='', body, prefer } = {}) {
+  const apiHeaders = { apikey:serviceKey };
+  // New sb_secret keys are opaque API keys, not JWTs. Legacy service_role
+  // keys are JWTs and still need the Bearer header for backwards compatibility.
+  if (!serviceKey.startsWith('sb_secret_')) apiHeaders.Authorization = `Bearer ${serviceKey}`;
   const response = await fetch(`${supabaseUrl}/rest/v1/${table}${query ? `?${query}` : ''}`, {
     method,
     headers: {
-      apikey: serviceKey,
-      Authorization: `Bearer ${serviceKey}`,
+      ...apiHeaders,
       'Content-Type': 'application/json',
       ...(prefer ? { Prefer: prefer } : {}),
     },
@@ -195,8 +198,10 @@ async function uploadVideo(userId,date,title,file) {
   const safeTitle=String(title).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60)||'history-short';
   const objectPath=`${userId}/${date}/${safeTitle}.mp4`;
   const bytes=await readFile(file);
+  const storageHeaders={apikey:serviceKey,'Content-Type':'video/mp4','x-upsert':'true'};
+  if (!serviceKey.startsWith('sb_secret_')) storageHeaders.Authorization=`Bearer ${serviceKey}`;
   const result=await fetch(`${supabaseUrl}/storage/v1/object/${BUCKET}/${objectPath}`,{
-    method:'POST',headers:{apikey:serviceKey,Authorization:`Bearer ${serviceKey}`,'Content-Type':'video/mp4','x-upsert':'true'},body:bytes,
+    method:'POST',headers:storageHeaders,body:bytes,
   });
   if(!result.ok) throw new Error(`Supabase Storage upload failed (${result.status}): ${(await result.text()).slice(0,500)}`);
   return objectPath;
