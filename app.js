@@ -1,6 +1,7 @@
 const $ = (id) => document.getElementById(id);
 const fields = ['series-name','niche','language','voice','art','caption','music','effects','aspect','duration','schedule'];
 const defaults = { 'series-name':'History in 60 Seconds', niche:'History', language:'English', voice:'Warm documentary', art:'Cinematic archival illustration', caption:'Bold, clean subtitles', music:'Subtle cinematic', effects:'Slow camera moves + soft transitions', aspect:'9:16', duration:'50', schedule:'daily' };
+const AUTH_REDIRECT_URL = 'https://nizamps.github.io/faceless-reel/';
 const config = window.FACELESS_SUPABASE;
 let client = null;
 let user = null;
@@ -87,7 +88,7 @@ async function onAuthChanged(session) {
 async function sendSignIn(e) {
   e.preventDefault(); if(!client) return notify('Supabase is not configured yet.');
   const button=$('auth-submit');button.disabled=true;button.textContent='Sending…';
-  const {error}=await client.auth.signInWithOtp({email:$('auth-email').value.trim(),options:{emailRedirectTo:window.location.href}});
+  const {error}=await client.auth.signInWithOtp({email:$('auth-email').value.trim(),options:{emailRedirectTo:AUTH_REDIRECT_URL}});
   button.disabled=false;button.textContent='Email me a sign-in link';
   if(error) notify(error.message); else notify('Check your email for a secure sign-in link.');
 }
