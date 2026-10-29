@@ -214,15 +214,23 @@ async function recentTopics(userId) {
 
 async function runProfile(settings,date) {
   const userId=settings.user_id;
-  const existing=await supabase('episodes',{query:`select=id,status&user_id=eq.${userId}&run_type=eq.daily&scheduled_for=eq.${date}&limit=1`});
-  if(existing?.length) { console.log(`${userId}: ${date} already has a ${existing[0].status} run; skipping.`);return; }
+  const existing=await supabase('episodes',{query:`select=id,status,estimated_cost_usd&user_id=eq.${userId}&run_type=eq.daily&scheduled_for=eq.${date}&limit=1`});
+  const retry=existing?.[0]?.status==='failed';
+  if(existing?.length && !retry) { console.log(`${userId}: ${date} already has a ${existing[0].status} run; skipping.`);return; }
   const month=date.slice(0,7)+'-01T00:00:00Z';
-  const monthRows=await supabase('episodes',{query:`select=estimated_cost_usd&user_id=eq.${userId}&created_at=gte.${encodeURIComponent(month)}&status=neq.budget_hold`});
-  const spent=(monthRows||[]).reduce((sum,row)=>sum+Number(row.estimated_cost_usd||0),0);
-  const remaining=Number(settings.monthly_budget_usd||30)-spent;
-  const shouldHold=remaining<EPISODE_ESTIMATE;
-  const created=await supabase('episodes',{method:'POST',query:'select=*',body:{user_id:userId,run_type:'daily',scheduled_for:date,status:shouldHold?'budget_hold':'queued',progress:0,progress_message:shouldHold?'Monthly generation budget reached':'Queued for daily generation',estimated_cost_usd:shouldHold?0:EPISODE_ESTIMATE,duration_seconds:settings.duration_seconds,aspect_ratio:settings.aspect_ratio,resolution:'4k'},prefer:'return=representation'});
-  const episode=created[0];
+  let shouldHold=false;
+  let episode;
+  if(retry) {
+    episode=existing[0];
+    await updateEpisode(episode.id,{status:'queued',progress:0,progress_message:'Retrying failed daily episode',error_message:null,finished_at:null});
+  } else {
+    const monthRows=await supabase('episodes',{query:`select=estimated_cost_usd&user_id=eq.${userId}&created_at=gte.${encodeURIComponent(month)}&status=neq.budget_hold`});
+    const spent=(monthRows||[]).reduce((sum,row)=>sum+Number(row.estimated_cost_usd||0),0);
+    const remaining=Number(settings.monthly_budget_usd||30)-spent;
+    shouldHold=remaining<EPISODE_ESTIMATE;
+    const created=await supabase('episodes',{method:'POST',query:'select=*',body:{user_id:userId,run_type:'daily',scheduled_for:date,status:shouldHold?'budget_hold':'queued',progress:0,progress_message:shouldHold?'Monthly generation budget reached':'Queued for daily generation',estimated_cost_usd:shouldHold?0:EPISODE_ESTIMATE,duration_seconds:settings.duration_seconds,aspect_ratio:settings.aspect_ratio,resolution:'4k'},prefer:'return=representation'});
+    episode=created[0];
+  }
   if(shouldHold){console.log(`${userId}: monthly limit reached; holding daily episode.`);return;}
 
   const temp=await mkdtemp(path.join(tmpdir(),'faceless-daily-'));
