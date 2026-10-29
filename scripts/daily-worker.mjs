@@ -242,6 +242,9 @@ async function runProfile(settings,date) {
     await updateEpisode(episode.id,{status:'ready',progress:100,progress_message:'4K MP4 ready to download',title:script.title,topic:script.topic||script.title,script,sources:Array.isArray(script.sources)?script.sources:[],storage_path:storagePath,duration_seconds:settings.duration_seconds,aspect_ratio:settings.aspect_ratio,resolution:'4k',finished_at:new Date().toISOString()});
     console.log(`${userId}: ready at ${render.dimensions}, ${storagePath}`);
   } catch(error) {
+    // Preserve the database failure record, but also fail the Actions run so
+    // a quota/API error cannot look like a successful video production.
+    process.exitCode=1;
     console.error(`${userId}: ${error.stack||error}`);
     await updateEpisode(episode.id,{status:'failed',progress_message:'Generation failed; see run details',error_message:String(error.message||error).slice(0,1500)}).catch(console.error);
   } finally {
